@@ -1,6 +1,6 @@
 # DBS
 Collection of projects for Data Analytics course at Dublin Business School (http://www.dbs.ie)
-=========
+
 
 Hi there!
 Projects whilst learning Data Analytics
