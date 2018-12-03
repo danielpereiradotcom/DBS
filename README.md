@@ -11,3 +11,4 @@ Projects whilst learning Data Analytics
 * CA1 - A 10 Function Calculator
 * CA2 - Car Dealearship
 * CA4 - Commit control log (String manipulation)
+* CA5 - Refactor of Calculator from CA1
