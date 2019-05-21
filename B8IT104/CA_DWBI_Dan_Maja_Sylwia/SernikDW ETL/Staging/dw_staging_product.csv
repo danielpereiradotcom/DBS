@@ -1,0 +1,78 @@
+ProductID;ProductName;CategoryID;UnitPrice;CategoryName
+1;Chai;1;18;Beverages
+2;Chang;1;19;Beverages
+3;Aniseed Syrup;2;10;Condiments
+4;Chef Anton's Cajun Seasoning;2;22;Condiments
+5;Chef Anton's Gumbo Mix;2;21.35;Condiments
+6;Grandma's Boysenberry Spread;2;25;Condiments
+7;Uncle Bob's Organic Dried Pears;7;30;Produce
+8;Northwoods Cranberry Sauce;2;40;Condiments
+9;Mishi Kobe Niku;6;97;Meat/Poultry
+10;Ikura;8;31;Seafood
+11;Queso Cabrales;4;21;Dairy Products
+12;Queso Manchego La Pastora;4;38;Dairy Products
+13;Konbu;8;6;Seafood
+14;Tofu;7;23.25;Produce
+15;Genen Shouyu;2;15.5;Condiments
+16;Pavlova;3;17.45;Confections
+17;Alice Mutton;6;39;Meat/Poultry
+18;Carnarvon Tigers;8;62.5;Seafood
+19;Teatime Chocolate Biscuits;3;9.2;Confections
+20;Sir Rodney's Marmalade;3;81;Confections
+21;Sir Rodney's Scones;3;10;Confections
+22;Gustaf's Knäckebröd;5;21;Grains/Cereals
+23;Tunnbröd;5;9;Grains/Cereals
+24;Guaraná Fantástica;1;4.5;Beverages
+25;NuNuCa Nuß-Nougat-Creme;3;14;Confections
+26;Gumbär Gummibärchen;3;31.23;Confections
+27;Schoggi Schokolade;3;43.9;Confections
+28;Rössle Sauerkraut;7;45.6;Produce
+29;Thüringer Rostbratwurst;6;123.79;Meat/Poultry
+30;Nord-Ost Matjeshering;8;25.89;Seafood
+31;Gorgonzola Telino;4;12.5;Dairy Products
+32;Mascarpone Fabioli;4;32;Dairy Products
+33;Geitost;4;2.5;Dairy Products
+34;Sasquatch Ale;1;14;Beverages
+35;Steeleye Stout;1;18;Beverages
+36;Inlagd Sill;8;19;Seafood
+37;Gravad lax;8;26;Seafood
+38;Côte de Blaye;1;263.5;Beverages
+39;Chartreuse verte;1;18;Beverages
+40;Boston Crab Meat;8;18.4;Seafood
+41;Jack's New England Clam Chowder;8;9.65;Seafood
+42;Singaporean Hokkien Fried Mee;5;14;Grains/Cereals
+43;Ipoh Coffee;1;46;Beverages
+44;Gula Malacca;2;19.45;Condiments
+45;Rogede sild;8;9.5;Seafood
+46;Spegesild;8;12;Seafood
+47;Zaanse koeken;3;9.5;Confections
+48;Chocolade;3;12.75;Confections
+49;Maxilaku;3;20;Confections
+50;Valkoinen suklaa;3;16.25;Confections
+51;Manjimup Dried Apples;7;53;Produce
+52;Filo Mix;5;7;Grains/Cereals
+53;Perth Pasties;6;32.8;Meat/Poultry
+54;Tourtière;6;7.45;Meat/Poultry
+55;Pâté chinois;6;24;Meat/Poultry
+56;Gnocchi di nonna Alice;5;38;Grains/Cereals
+57;Ravioli Angelo;5;19.5;Grains/Cereals
+58;Escargots de Bourgogne;8;13.25;Seafood
+59;Raclette Courdavault;4;55;Dairy Products
+60;Camembert Pierrot;4;34;Dairy Products
+61;Sirop d'érable;2;28.5;Condiments
+62;Tarte au sucre;3;49.3;Confections
+63;Vegie-spread;2;43.9;Condiments
+64;Wimmers gute Semmelknödel;5;33.25;Grains/Cereals
+65;Louisiana Fiery Hot Pepper Sauce;2;21.05;Condiments
+66;Louisiana Hot Spiced Okra;2;17;Condiments
+67;Laughing Lumberjack Lager;1;14;Beverages
+68;Scottish Longbreads;3;12.5;Confections
+69;Gudbrandsdalsost;4;36;Dairy Products
+70;Outback Lager;1;15;Beverages
+71;Flotemysost;4;21.5;Dairy Products
+72;Mozzarella di Giovanni;4;34.8;Dairy Products
+73;Röd Kaviar;8;15;Seafood
+74;Longlife Tofu;7;10;Produce
+75;Rhönbräu Klosterbier;1;7.75;Beverages
+76;Lakkalikööri;1;18;Beverages
+77;Original Frankfurter grüne Soße;2;13;Condiments
