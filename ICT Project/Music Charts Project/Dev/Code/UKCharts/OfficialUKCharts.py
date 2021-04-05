@@ -22,7 +22,7 @@ class OfficialUKChartsSpider(scrapy.Spider):
     This class represents the Spider to UK Top 100 Charts
     '''
     # Spider attributes
-    name            = "OfficialUKChartsSpiderSun" # crawler identifier
+    name            = "OfficialUKChartsSpider" # crawler identifier
     start_urls      = ['https://www.officialcharts.com/charts/singles-chart'] # the initial url or the current url
     #start_urls      = ['https://www.officialcharts.com/charts/singles-chart/19521114/7501/'] # the last chart (or the first page)
     
@@ -36,19 +36,22 @@ class OfficialUKChartsSpider(scrapy.Spider):
     
     # custom properties
     enforce_date_range  = False
+    enforce_weeks_limit = False
     navigation_mode     = None
 
     # constants
     NAVIGATION_MODE_PREVIOUS    = "prev"
     NAVIGATION_MODE_NEXT        = "next"
+    WEEKS_LIMIT                 = 2
 
 
 
     # custom constructor
     def __init__(self):
-        self.enforce_date_range = False
-        self.setCounterWeeks(0) #just a simple counter 
-        self.navigation_mode = self.NAVIGATION_MODE_PREVIOUS #set the mode to look for previous page or next page
+        self.enforce_date_range     = False
+        self.enforce_weeks_limit    = False
+        self.setCounterWeeks(0)     #just a simple counter 
+        self.navigation_mode        = self.NAVIGATION_MODE_PREVIOUS #set the mode to look for previous page or next page
         #self.setEndDate("")
         #self.setStartDate("")
 
@@ -117,18 +120,21 @@ class OfficialUKChartsSpider(scrapy.Spider):
                                 response.css('.article-heading+ .article-date::text').extract_first().strip())
 
             page_chart_week = dt.date(parser.parse(page_chart_week))
-            self.logger.info('#%d (%s) - Scraping page: %s', self.getCounterWeeks(), page_chart_week, response.url)
+            self.logger.info('Week #%d (%s) - Scraping page: %s', self.getCounterWeeks(), page_chart_week, response.url)
 
             is_valid_page = False
-            if (self.enforce_date_range):
-                # Validate whether is on date range to extract information
-                if (page_chart_week >= self.getStartDate() and page_chart_week <= self.getEndDate()):
+            if (self.enforce_weeks_limit):
+                # Validate whether is on allowed number of interactions
+                if (self.getCounterWeeks() <= self.WEEKS_LIMIT): is_valid_page = True
+            else:                    
+                if (self.enforce_date_range):
+                    # Validate whether is on date range to extract information
+                    if (page_chart_week >= self.getStartDate() and page_chart_week <= self.getEndDate()):
+                        is_valid_page = True
+                else:
                     is_valid_page = True
-            else:
-                is_valid_page = True
 
             if (is_valid_page):
-                self.logger.info('** page is valid')
                 #response.css('#main .artist a::text').extract(),
                 # Extract each tag from html and parse into a variable
                 for (chart_pos, lastweek, artist, artist_num, track, label, peak_pos, weeks_on_chart) in \
@@ -150,22 +156,16 @@ class OfficialUKChartsSpider(scrapy.Spider):
                             'last_week': re.findall(r'\d+|$', lastweek)[0],
                             'peak_pos': re.findall(r'\d+|$', peak_pos)[0],
                             'weeks_on_chart': re.findall(r'\d+|$', weeks_on_chart)[0]}  
+
+                for next_page in response.css('.charts-header-panel:nth-child(1) .chart-date-directions'):
+                    if next_page.css("a::text").extract_first() in [self.NAVIGATION_MODE_PREVIOUS, self.NAVIGATION_MODE_NEXT]:
+                        yield response.follow(next_page, self.parse)   
+                    else:
+                        self.logger.critical('Navigation mode is not defined: ', self.navigation_mode)           
             else:
                 # outside of allowed date range
                 self.logger.info('%s is outside of the allowed date range', page_chart_week)
 
-            if self.navigation_mode == self.NAVIGATION_MODE_PREVIOUS:
-                # Look for prev page and call the process (if it exists)
-                for next_page in response.css('.charts-header-panel:nth-child(1) .chart-date-directions'):
-                    if next_page.css("a::text").extract_first() == self.NAVIGATION_MODE_PREVIOUS:
-                        yield response.follow(next_page, self.parse)              
-            elif self.navigation_mode == self.NAVIGATION_MODE_NEXT:
-                # Look for next page and call the process (if it exists)
-                for next_page in response.css('.charts-header-panel:nth-child(1) .chart-date-directions'):
-                    if next_page.css("a::text").extract_first() == self.NAVIGATION_MODE_NEXT:
-                        yield response.follow(next_page, self.parse)              
-            else:
-                self.logger.critical('Navigation mode is not defined: ', self.navigation_mode)
         except Exception as ex:
             self.logger.critical('Unexpected error during parsing: ', ex.__class__)
         finally:
