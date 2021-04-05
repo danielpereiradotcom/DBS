@@ -30,19 +30,25 @@ class OfficialUKChartsSpider(scrapy.Spider):
     download_delay  = 1 # multi thread delay
 
     # custom attributes
-    __counterWeeks = None
-    __endChartDate = None
-    __startChartDate = None
+    __counterWeeks      = None
+    __endChartDate      = None
+    __startChartDate    = None
     
     # custom properties
-    enforce_date_range = False
+    enforce_date_range  = False
+    navigation_mode     = None
+
+    # constants
+    NAVIGATION_MODE_PREVIOUS    = "prev"
+    NAVIGATION_MODE_NEXT        = "next"
 
 
 
     # custom constructor
     def __init__(self):
         self.enforce_date_range = False
-        self.setCounterWeeks(1) #just a simple counter 
+        self.setCounterWeeks(0) #just a simple counter 
+        self.navigation_mode = self.NAVIGATION_MODE_PREVIOUS #set the mode to look for previous page or next page
         #self.setEndDate("")
         #self.setStartDate("")
 
@@ -123,14 +129,15 @@ class OfficialUKChartsSpider(scrapy.Spider):
 
             if (is_valid_page):
                 self.logger.info('** page is valid')
+                #response.css('#main .artist a::text').extract(),
                 # Extract each tag from html and parse into a variable
-                for (artist, chart_pos, artist_num, track, label, lastweek, peak_pos, weeks_on_chart) in \
-                    zip(response.css('#main .artist a::text').extract(),
-                        response.css('.position::text').extract(),
-                        response.css('#main .artist a::attr(href)').extract(),
-                        response.css('.track .title a::text').extract(),
-                        response.css('.label-cat .label::text').extract(),
+                for (chart_pos, lastweek, artist, artist_num, track, label, peak_pos, weeks_on_chart) in \
+                    zip(response.css('.position::text').extract(),
                         response.css('.last-week::text').extract(),
+                        response.css('.track .title-artist .artist a::text').extract(),
+                        response.css('#main .artist a::attr(href)').extract(),
+                        response.css('.track .title-artist .title a::text').extract(),
+                        response.css('.label-cat .label::text').extract(),
                         response.css('td:nth-child(4)::text').extract(),
                         response.css('td:nth-child(5)::text').extract()):
                     yield { 'counter_week': self.getCounterWeeks(),
@@ -140,18 +147,25 @@ class OfficialUKChartsSpider(scrapy.Spider):
                             'artist': artist,
                             'artist_num': re.sub('/.*', '', re.sub('/artist/', '', artist_num)),
                             'label': label, 
-                            'last_week': re.findall('\d+|$', lastweek)[0],
-                            'peak_pos': re.findall('\d+|$', peak_pos)[0],
-                            'weeks_on_chart': re.findall('\d+|$', weeks_on_chart)[0]}  
+                            'last_week': re.findall(r'\d+|$', lastweek)[0],
+                            'peak_pos': re.findall(r'\d+|$', peak_pos)[0],
+                            'weeks_on_chart': re.findall(r'\d+|$', weeks_on_chart)[0]}  
             else:
                 # outside of allowed date range
                 self.logger.info('%s is outside of the allowed date range', page_chart_week)
 
-
-            # Look for next page and call the process (if it exists)
-            for next_page in response.css('.charts-header-panel:nth-child(1) .chart-date-directions'):
-                if next_page.css("a::text").extract_first() == 'next':
-                    yield response.follow(next_page, self.parse)              
+            if self.navigation_mode == self.NAVIGATION_MODE_PREVIOUS:
+                # Look for prev page and call the process (if it exists)
+                for next_page in response.css('.charts-header-panel:nth-child(1) .chart-date-directions'):
+                    if next_page.css("a::text").extract_first() == self.NAVIGATION_MODE_PREVIOUS:
+                        yield response.follow(next_page, self.parse)              
+            elif self.navigation_mode == self.NAVIGATION_MODE_NEXT:
+                # Look for next page and call the process (if it exists)
+                for next_page in response.css('.charts-header-panel:nth-child(1) .chart-date-directions'):
+                    if next_page.css("a::text").extract_first() == self.NAVIGATION_MODE_NEXT:
+                        yield response.follow(next_page, self.parse)              
+            else:
+                self.logger.critical('Navigation mode is not defined: ', self.navigation_mode)
         except Exception as ex:
             self.logger.critical('Unexpected error during parsing: ', ex.__class__)
         finally:
