@@ -42,14 +42,14 @@ class OfficialUKChartsSpider(scrapy.Spider):
     # constants
     NAVIGATION_MODE_PREVIOUS    = "prev"
     NAVIGATION_MODE_NEXT        = "next"
-    WEEKS_LIMIT                 = 2
+    WEEKS_LIMIT                 = 52*5
 
 
 
     # custom constructor
     def __init__(self):
         self.enforce_date_range     = False
-        self.enforce_weeks_limit    = False
+        self.enforce_weeks_limit    = True
         self.setCounterWeeks(0)     #just a simple counter 
         self.navigation_mode        = self.NAVIGATION_MODE_PREVIOUS #set the mode to look for previous page or next page
         #self.setEndDate("")
