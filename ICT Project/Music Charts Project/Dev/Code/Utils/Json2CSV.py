@@ -9,6 +9,8 @@ This file is a simple python code to convert a json into CSV file
 
 ##################################################
 import pandas as pd
+import glob
+import os
 
 def convert_chart_to_csv(input_json, output_csv):
     try:
@@ -25,7 +27,18 @@ def convert_chart_to_csv(input_json, output_csv):
 
 ## initial load code
 if __name__ == '__main__':
-    convert_chart_to_csv('Dataset/OfficialUKCharts.json', 'Dataset/OfficialUKCharts.csv')
+    #clean the console
+    os.system('cls')
+    
+    contents = []
+    json_dir_name = 'Dataset'
+
+    json_pattern = os.path.join(json_dir_name, '*.json')
+    file_list = glob.glob(json_pattern)
+    for file in file_list:
+        #file = file.replace('\\','/')
+        output_file = file.split('.')[0] + '.csv'
+        convert_chart_to_csv(file, output_file)
 
 
 
