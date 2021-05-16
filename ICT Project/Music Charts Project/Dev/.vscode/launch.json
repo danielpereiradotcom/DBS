@@ -19,7 +19,7 @@
             "module": "scrapy",
             "args": [
                 "runspider", 
-                "${file}"
+                "${UKCharts.py}"
             ]
         }
     ]
